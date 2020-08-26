@@ -7,11 +7,12 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  padding: 10rem;
 }
 .form-container {
   display: flex;
   flex-direction: column;
-  width: 32rem;
+  width: 20rem;
   padding: 2rem;
   border: 0.1rem #c0c0c0 solid;
   border-radius: 0.5rem;
@@ -28,7 +29,25 @@ input {
   border: 0.1rem #c0c0c0 solid;
   border-radius: 0.5rem;
 }
-`
+.button {
+    padding: 1rem;
+    border: 0.1rem #808080 solid;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  .button:hover {
+    border: 0.1rem #404040 solid;
+  }
+.button.primary {
+    background-color: #f0c040;
+  }
+  @media(max-width: 375px ){
+    .form-container {
+        width: 15rem;
+
+      }
+  }
+`;
 
 const Signin = () => {
     const [email, setEmail] = useState('');
