@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { register } from '../redux/actions/user.action';
 
 const Div = styled.div`
     display: flex;
@@ -48,30 +51,59 @@ input {
 }
 `;
 
-const Register = () => {
+const Register = (props) => {
 
+    const [data, setData] = useState({error: {}});
+    const { errors } = data;
+    const userRegister = useSelector(state => state.userRegister);
+    const { loading, userInfo, error } = userRegister;
+    const dispatch = useDispatch();
+  
+    const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
+    useEffect(() => {
+      if (userInfo) {
+        props.history.push(redirect);
+      }
+      return () => {
+        //
+      };
+    }, [userInfo]);
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [rePassword, setRePassword] = useState('');
-    // const userRegister = useSelector(state => state.userRegister);
-    // const { loading, userInfo, error } = userRegister;
-    // const dispatch = useDispatch();
+    const validate = (v) => {        
+        const errors = {};
+        if(!v.email){
+            errors.nombre = "El campo nombres es obligatorio";
+        }
+        if(!v.password){
+            errors.password = "La clave es obligatoria";
+        }
+        if(!v.rePassword){
+            errors.rePassword = "La clave es obligatoria";
+        }
+        if (v.password !== v.rePassword) {
+            errors.password = "las contraseñas no son iguales :V";
+        }
+        return errors
+    }
 
-    // const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
-    // useEffect(() => {
-    //     if (userInfo) {
-    //     props.history.push(redirect);
-    //     }
-    //     return () => {
-    //     //
-    //     };
-    // }, [userInfo]);
+    const handlerOnChange = (target) => {
+        const {name, value} = target;
+        setData({ ...data, [name]: value });
+        
+    }
 
     const submitHandler = (e) => {
         e.preventDefault();
-        // dispatch(register(name, email, password));
+        const {errors, ...sinErrors} = data;
+        const result = validate(sinErrors);
+        setData({errors: result});
+        if(!Object.keys(result).length){
+
+            console.log("Form validado");
+            e.target.reset();
+            dispatch(register(data.email, data.password));
+        } 
+    
     }
     return(
         <Div>
@@ -81,31 +113,26 @@ const Register = () => {
                         <h2>Create Account</h2>
                     </li>
                     <li>
-                    {/* {loading && <div>Loading...</div>}
-                    {error && <div>{error}</div>} */}
-                    </li>
-                    <li>
-                    <label htmlFor="name">
-                        Name
-                    </label>
-                        <input type="name" name="name" id="name" onChange={(e) => setName(e.target.value)}>
-                        </input>
+                    {loading && <div>Loading...</div>}
+                    {error && <div>{error}</div>}
+                    {errors && <p>Hay errores en los campos</p>}
+
                     </li>
                     <li>
                         <label htmlFor="email">
                             Email
                         </label>
-                        <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}>
+                        <input type="email" name="email" id="email" onChange={(e) => handlerOnChange(e.target)}>
                         </input>
                     </li>
                     <li>
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)}>
+                        <input type="password" id="password" name="password" onChange={(e) => handlerOnChange(e.target)}>
                         </input>
                     </li>
                     <li>
                         <label htmlFor="rePassword">Re-Enter Password</label>
-                        <input type="password" id="rePassword" name="rePassword" onChange={(e) => setRePassword(e.target.value)}>
+                        <input type="password" id="rePassword" name="rePassword" onChange={(e) => handlerOnChange(e.target)}>
                         </input>
                     </li>
                     <li>
@@ -113,9 +140,8 @@ const Register = () => {
                     </li>
                     <li>
                         Already have an account?
-                        {/* <Link to={redirect === "/" ? "signin" : "signin?redirect=" + redirect} className="button secondary text-center" >Create your amazona account</Link> */}
+                        <Link to={'/signin'} className="button secondary text-center" >Login in Tiendita</Link>
                     </li>
-
                 </ul>
             </form>
         </Div>

@@ -22,41 +22,45 @@ const Div = styled.div`
 `;
 
 const Products = ({ open }) => {
-  const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productos);
-  const { products, loading, error } = productList;
+	const dispatch = useDispatch();
+	const productList = useSelector((state) => state.productos);
+	const { products, loading, error } = productList;
 
-  useEffect(() => {
-    dispatch(fetchProduct());
-  }, []);
-  console.log(productList);
+	useEffect(() => {
+		dispatch(fetchProduct());
+	}, []);
+	console.log(productList);
   
-  return (
-    <Div>
-		{
-		loading ? (
-			<div>Loading...</div>
-		) : error ? (
-			<div>{error}</div>
-		) : (
-			products.map((product) => (
-			<div key={product.id} className="product-card">
-				<Link to={"/product/" + product.id}>
-					<img
-						src={product.avatar}
-						alt="Retro Pile Fleece Pullover"
-					/>
-				</Link>
-				<Link to={"/product/" + product.id}>
-					<h2>{product.first_name} {product.last_name}</h2>
-				</Link>
-				<h3>Cobalt Blue</h3>
-				<h4>$129.00</h4>
-			</div>
-			))
-		)}
-    </Div>
-  );
-};
+	return (
+		<Div>
+			{
+				loading ? (
+					<div>Loading...</div>
+				) : error ? (
+					<div>{error}</div>
+				) : Object.keys(products).length === 0 ? ( 
+					<p>NO HAY</p>
+				) : (
+					products.items.map((product) => (
+						<div key={product.id} className="product-card">
+							<Link to={"/product/" + product.id}>
+								<img
+									src={product.avatar}
+									alt="Retro Pile Fleece Pullover"
+								/>
+							</Link>
+							<Link to={"/product/" + product.id}>
+								<h2>{product.name}</h2>
+							</Link>
+							<h3>Cobalt Blue</h3>
+							<h4>$129.00</h4>
+						</div>
+					))
+				)
+			}
+
+		</Div>
+	);
+	};
 
 export default Products;

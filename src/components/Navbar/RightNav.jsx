@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../redux/actions/user.action';
 
 const Ul = styled.ul`
   list-style: none;
@@ -8,7 +10,7 @@ const Ul = styled.ul`
   flex-flow: row nowrap;
   z-index: 15;
   li {
-    padding: 0 10px;
+    padding: 15px 10px;
   }
   a{
     color: white
@@ -30,20 +32,65 @@ const Ul = styled.ul`
   }
 `;
 
-const RightNav = ({ open }) => {
-  return (
-    <Ul open={open}>
-      <li>
-        <Link to={'/'}>Home</Link>
-      </li>
-      <li>
-        <Link to={'/signin'}>Sign In</Link>
-      </li>
-      <li>
-        <Link to={'/register'}>Sign Up</Link>
-      </li>
-    </Ul>
-  )
+const RightNav = (...props) => {
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { userInfo } = userSignin;
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (userInfo) {
+			
+		}
+		return () => {
+
+		};
+	}, [userInfo]);
+
+	const handleLogout = () => {
+		dispatch(logout());
+		props.history.push("/");
+	}
+
+	return (
+		<Ul open={props.open}>
+		{ userInfo ? (
+				<>
+					<li>
+						{userInfo.user.email}
+					</li>
+					<li>
+						<Link to={'/'}>Home</Link>
+					</li>
+					{	userInfo.user.isAdmin == 1 && 
+						<li>
+							<Link to="/products">Products</Link>
+						</li>
+						
+					}
+					<li>
+						<Link to="/profile">Profile</Link>
+					</li>
+					<li>
+						<Link onClick={handleLogout}>Logout</Link>
+					</li>
+				</>
+			) : (
+				<>
+					<li>
+						<Link to={'/'}>Home</Link>
+					</li>
+					<li>
+						<Link to={'/signin'}>Sign In</Link>
+					</li>
+					<li>
+						<Link to={'/register'}>Sign Up</Link>
+					</li>
+				</>
+			)
+		}
+		
+		</Ul>
+	)
 }
 
 export default RightNav

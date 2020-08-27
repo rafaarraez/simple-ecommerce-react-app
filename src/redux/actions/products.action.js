@@ -8,6 +8,11 @@ export const PRODUCT_DETAILS_REQUEST = 'PRODUCT_DETAILS_REQUEST';
 export const PRODUCT_DETAILS_SUCCESS = 'PRODUCT_DETAILS_SUCCESS';
 export const PRODUCT_DETAILS_FAIL = 'PRODUCT_DETAILS_FAIL';
 
+export const PRODUCT_SAVE_REQUEST = 'PRODUCT_SAVE_REQUEST';
+export const PRODUCT_SAVE_SUCCESS = 'PRODUCT_SAVE_SUCCESS';
+export const PRODUCT_SAVE_FAIL = 'PRODUCT_SAVE_FAIL';
+
+
 export const fetchProductRequest = () => {
     return {
         type: PRODUCT_LIST_REQUEST
@@ -51,9 +56,9 @@ export const fetchProductDetailsFailure = (error) => {
 const fetchProduct = () => {
     return (dispatch) => {
         dispatch(fetchProductRequest());
-        Axios.get(`https://reqres.in/api/users`)
+        Axios.get(`http://127.0.0.1:3001/products`)
             .then(res => {
-                dispatch(fetchProductSuccess(res.data.data))
+                dispatch(fetchProductSuccess(res.data))
             })
             .catch(error => {
                 dispatch(fetchProductFailure(error))
@@ -64,9 +69,9 @@ const fetchProduct = () => {
 const fetchProductDetails = (id) => {
     return (dispatch) => {
         dispatch(fetchProductDetailsRequest());
-        Axios.get(`https://reqres.in/api/users/${id}`)
+        Axios.get(`http://127.0.0.1:3001/products/${id}`)
             .then(res => {
-                dispatch(fetchProductDetailsSuccess(res.data.data))
+                dispatch(fetchProductDetailsSuccess(res.data))
             })
             .catch(error => {
                 dispatch(fetchProductDetailsFailure(error))
@@ -74,4 +79,51 @@ const fetchProductDetails = (id) => {
     }
 };
 
-export { fetchProduct, fetchProductDetails};
+const saveProduct = (product) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: PRODUCT_SAVE_REQUEST,
+			payload: product
+		});
+		const {
+			userSignin: {
+				userInfo
+			},
+		} = getState();
+		if (!product._id) {
+			const {
+				data
+			} = await Axios.post('/api/products', product, {
+				headers: {
+					Authorization: 'Bearer ' + userInfo.token,
+				},
+			});
+			dispatch({
+				type: PRODUCT_SAVE_SUCCESS,
+				payload: data
+			});
+		} else {
+			const {
+				data
+			} = await Axios.put(
+				'/api/products/' + product._id,
+				product, {
+					headers: {
+						Authorization: 'Bearer ' + userInfo.token,
+					},
+				}
+			);
+			dispatch({
+				type: PRODUCT_SAVE_SUCCESS,
+				payload: data
+			});
+		}
+	} catch (error) {
+		dispatch({
+			type: PRODUCT_SAVE_FAIL,
+			payload: error.message
+		});
+	}
+};
+
+export { fetchProduct, fetchProductDetails, saveProduct};

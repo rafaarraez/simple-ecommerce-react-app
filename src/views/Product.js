@@ -101,7 +101,7 @@ const Product = (props) => {
                     <div className="right-column">
                         <div className="product-description">
                             <span><Link to="/">Back to result</Link></span>
-                            <h1>{product.first_name} {product.last_name}</h1>
+                            <h1>{product.name}</h1>
                             <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
                         </div>
                         <button className="button primary">Comporar</button>
