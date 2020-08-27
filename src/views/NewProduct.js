@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Axios from 'axios';
 import { saveProduct } from '../redux/actions/products.action';
+import FormContainer from '../components/form/form';
+import Button from '../components/button/button';
 
 const Div = styled.div`
     display: flex;
@@ -11,16 +13,7 @@ const Div = styled.div`
     height: 100%;
     padding: 10rem;
 }
-.form-container {
-    display: flex;
-    flex-direction: column;
-    width: 20rem;
-    padding: 2rem;
-    border: 0.1rem #c0c0c0 solid;
-    border-radius: 0.5rem;
-    list-style-type: none;
-    }
-.form-container li {
+li {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
@@ -31,18 +24,7 @@ input {
     border: 0.1rem #c0c0c0 solid;
     border-radius: 0.5rem;
 }
-.button {
-  padding: 1rem;
-  border: 0.1rem #808080 solid;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-.button:hover {
-  border: 0.1rem #404040 solid;
-}
-.button.primary {
-  background-color: #f0c040;
-}
+
 @media(max-width: 375px ){
   .form-container {
       width: 15rem;
@@ -101,7 +83,7 @@ const NewProduct = (props) => {
     return(
         <Div>
             <form onSubmit={submitHandler} >
-                <ul className="form-container">
+                <FormContainer>
                     <li>
                         <h2>Create Product</h2>
                     </li>
@@ -123,9 +105,9 @@ const NewProduct = (props) => {
                         {uploading && <div>Uploading...</div>}
                     </li>
                     <li>
-                        <button type="submit" className="button primary">Create</button>
+                        <Button type="submit" className="button primary">Create</Button>
                     </li>
-                </ul>
+                </FormContainer>
             </form>
         </Div>
     );

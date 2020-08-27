@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Burger from './Burger';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const Nav = styled.nav`
   height: 55px;
@@ -23,12 +22,8 @@ const Nav = styled.nav`
 `
 
 const Navbar = () => {
-	const userSignin = useSelector((state) => state.userSignin);
-	const { userInfo } = userSignin;
-	console.log(userInfo);
-	
-	return (
 
+	return (
 		<Nav>
 			<div className="logo">
 				<Link to={'/'}> Tiendita </Link>

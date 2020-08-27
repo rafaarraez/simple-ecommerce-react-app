@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from '../components/button/button';
+import { logout } from '../redux/actions/user.action';
 
 
 const Main = styled.main`
@@ -85,7 +87,7 @@ const Div = styled.div`
 .form-container {
   display: flex;
   flex-direction: column;
-  width: 20rem;
+  width: 25rem;
   padding: 2rem;
   border: 0.1rem #c0c0c0 solid;
   border-radius: 0.5rem;
@@ -123,17 +125,20 @@ input {
 `;
 
 const Profile = (props) => {
-    const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const dispatch = useDispatch();
 
     const userSignin = useSelector(state => state.userSignin);
-    const { userInfo } = userSignin;
+    const { userInfo} = userSignin;
+
+    const handleLogout = () => {
+        dispatch(logout());
+        props.history.push("/signin");
+    }
+
     useEffect(() => {
         if (userInfo) {
-            console.log();
             setEmail(userInfo.user.email);
-            setPassword(userInfo.user.password);
         }
         return () => {
     
@@ -157,14 +162,19 @@ const Profile = (props) => {
                             </li>
                             <li>
                                 <label htmlFor="password">Password</label>
-                                <input type="password" value={password} id="password" name="password">
+                                <input type="password" id="password" name="password">
                                 </input>
                             </li>
                             <li>
-                                <button type="submit" className="button primary">Update Profile</button>
+                                <label htmlFor="repassword">rePassword</label>
+                                <input type="repassword" id="repassword" name="repassword">
+                                </input>
                             </li>
                             <li>
-                                <button type="submit" className="button secundary">Logout</button>
+                                <Button type="submit">Update Profile</Button>
+                            </li>
+                            <li>
+                                <button type="submit" className="button secundary" onClick={handleLogout}>Logout</button>
                             </li>
                         </ul>
                     </form>
@@ -174,9 +184,8 @@ const Profile = (props) => {
                 <div className="product-description">
                     <span><Link to="/">Back to result</Link></span>
                     <h1>{email}</h1>
-                    <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
                 </div>
-                <button className="button primary">Comporar</button>
+                
             </div>
         </Main>
     )

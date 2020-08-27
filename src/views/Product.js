@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductDetails } from '../redux/actions/products.action';
+import Button from '../components/button/button';
 
 const Main = styled.main`
     max-width: 1200px;
@@ -49,19 +50,6 @@ const Main = styled.main`
     color: #86939E;
     line-height: 24px;
 }
-.button {
-    padding: 1rem;
-    border: 0.1rem #808080 solid;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    width: 100%;
-  }
-.button:hover {
-    border: 0.1rem #404040 solid;
-}
-.button.primary {
-    background-color: #f0c040;
-}
 @media(max-width: 700px ){
         display: block;
     }
@@ -85,7 +73,6 @@ const Product = (props) => {
     useEffect(() => {
         dispatch(fetchProductDetails(props.match.params.id));
     }, []);
-    console.log(productDetailsReducer);
     
     return(
         <Main className="container">
@@ -104,7 +91,7 @@ const Product = (props) => {
                             <h1>{product.name}</h1>
                             <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
                         </div>
-                        <button className="button primary">Comporar</button>
+                        <Button className="button primary">Comporar</Button>
                     </div>
                 </>
             )}

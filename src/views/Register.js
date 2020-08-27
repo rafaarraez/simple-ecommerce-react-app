@@ -98,7 +98,6 @@ const Register = (props) => {
         const result = validate(sinErrors);
         setData({errors: result});
         if(!Object.keys(result).length){
-
             console.log("Form validado");
             e.target.reset();
             dispatch(register(data.email, data.password));

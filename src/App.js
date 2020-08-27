@@ -12,6 +12,8 @@ import { Provider } from 'react-redux';
 import Profile from './views/Profile';
 import NewProduct from './views/NewProduct';
 import GlobalStyles from './components/globalStyles/globalStyles';
+import PrivateRoutes from './components/privateRoutes/privateRoutes';
+import AdminRoutes from './components/privateRoutes/adminOnlys/adminnOnlys';
 
 function App() {
   return (
@@ -24,9 +26,9 @@ function App() {
 				<Route path="/signin" component={Signin}/>
 				<Route path="/register" component={Register}/>
 				<Route path="/product/:id" component={Product}/>
-				<Route path="/products" component={ProductsList}/>
-				<Route path="/profile" component={Profile}/>
-				<Route path="/new-product" component={NewProduct}/>
+				<PrivateRoutes path="/profile" component={Profile}/>
+				<AdminRoutes path="/products" component={ProductsList}/>
+				<AdminRoutes path="/new-product" component={NewProduct}/>
 				<Footer />
 			</Router>
 		</Provider>	

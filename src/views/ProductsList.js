@@ -1,7 +1,7 @@
 import React, { useEffect  } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProduct } from '../redux/actions/products.action';
+import { fetchProduct, deleteProdcut } from '../redux/actions/products.action';
 import { Link } from 'react-router-dom';
 
 const Div = styled.div`
@@ -33,9 +33,12 @@ const ProductsList = () => {
     const { products, loading, error } = productList;
 
     useEffect(() => {
-    dispatch(fetchProduct());
+        dispatch(fetchProduct());
     }, []);
-    console.log(productList);
+
+    const deleteProduct = (id) => {
+        dispatch(deleteProdcut(id))  
+    }
 
     return(
         <Div className="content content-margined">
@@ -75,6 +78,7 @@ const ProductsList = () => {
                                     </button>{' '}
                                     <button
                                         className="button"
+                                        onClick={() => deleteProduct(product.id)}
                                     >
                                         Delete
                                     </button>

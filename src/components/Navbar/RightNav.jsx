@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/user.action';
+import { useSelector } from 'react-redux';
 
 const Ul = styled.ul`
   list-style: none;
@@ -36,7 +35,6 @@ const RightNav = (...props) => {
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { userInfo } = userSignin;
-	const dispatch = useDispatch();
 	useEffect(() => {
 		if (userInfo) {
 			
@@ -46,22 +44,19 @@ const RightNav = (...props) => {
 		};
 	}, [userInfo]);
 
-	const handleLogout = () => {
-		dispatch(logout());
-		props.history.push("/");
-	}
-
 	return (
 		<Ul open={props.open}>
 		{ userInfo ? (
 				<>
 					<li>
-						{userInfo.user.email}
+						<Link to={'/profile'} >
+							{userInfo.user.email}
+						</Link>
 					</li>
 					<li>
 						<Link to={'/'}>Home</Link>
 					</li>
-					{	userInfo.user.isAdmin == 1 && 
+					{	userInfo.user.isAdmin === true && 
 						<li>
 							<Link to="/products">Products</Link>
 						</li>
@@ -69,9 +64,6 @@ const RightNav = (...props) => {
 					}
 					<li>
 						<Link to="/profile">Profile</Link>
-					</li>
-					<li>
-						<Link onClick={handleLogout}>Logout</Link>
 					</li>
 				</>
 			) : (

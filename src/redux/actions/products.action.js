@@ -12,6 +12,9 @@ export const PRODUCT_SAVE_REQUEST = 'PRODUCT_SAVE_REQUEST';
 export const PRODUCT_SAVE_SUCCESS = 'PRODUCT_SAVE_SUCCESS';
 export const PRODUCT_SAVE_FAIL = 'PRODUCT_SAVE_FAIL';
 
+export const PRODUCT_DELETE_REQUEST = 'PRODUCT_DELETE_REQUEST';
+export const PRODUCT_DELETE_SUCCESS = 'PRODUCT_DELETE_SUCCESS';
+export const PRODUCT_DELETE_FAIL = 'PRODUCT_DELETE_FAIL';
 
 export const fetchProductRequest = () => {
     return {
@@ -64,6 +67,37 @@ const fetchProduct = () => {
                 dispatch(fetchProductFailure(error))
             });
     }
+};
+
+const deleteProdcut = (productId) => async (dispatch, getState) => {
+	try {
+		const {
+			userSignin: {
+				userInfo
+			},
+		} = getState();
+		dispatch({
+			type: PRODUCT_DELETE_REQUEST,
+			payload: productId
+		});
+		const {
+			data
+		} = await Axios.delete('http://127.0.0.1:3001/products/' + productId, {
+			headers: {
+				Authorization: 'Bearer ' + userInfo.token,
+			},
+		});
+		dispatch({
+			type: PRODUCT_DELETE_SUCCESS,
+			payload: data,
+			success: true
+		});
+	} catch (error) {
+		dispatch({
+			type: PRODUCT_DELETE_FAIL,
+			payload: error.message
+		});
+	}
 };
 
 const fetchProductDetails = (id) => {
@@ -126,4 +160,4 @@ const saveProduct = (product) => async (dispatch, getState) => {
 	}
 };
 
-export { fetchProduct, fetchProductDetails, saveProduct};
+export { fetchProduct, fetchProductDetails, saveProduct, deleteProdcut};
