@@ -31,7 +31,7 @@ const Ul = styled.ul`
   }
 `;
 
-const RightNav = (...props) => {
+const RightNav = (props) => {
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { userInfo } = userSignin;

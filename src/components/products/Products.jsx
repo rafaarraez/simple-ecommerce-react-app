@@ -29,7 +29,8 @@ const Products = ({ open }) => {
 	useEffect(() => {
 		dispatch(fetchProduct());
 	}, []);
-  
+	console.log(products);
+	
 	return (
 		<Div>
 			{
@@ -44,7 +45,7 @@ const Products = ({ open }) => {
 						<div key={product.id} className="product-card">
 							<Link to={"/product/" + product.id}>
 								<img
-									src={product.thumbnailUrl}
+									src={product.image.url}
 									alt="Retro Pile Fleece Pullover"
 								/>
 							</Link>

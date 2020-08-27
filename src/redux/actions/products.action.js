@@ -113,51 +113,34 @@ const fetchProductDetails = (id) => {
     }
 };
 
-const saveProduct = (product) => async (dispatch, getState) => {
-	try {
-		dispatch({
-			type: PRODUCT_SAVE_REQUEST,
-			payload: product
-		});
-		const {
-			userSignin: {
-				userInfo
+const saveProduct = (name, image) => async (dispatch, getState) => {
+	
+	dispatch({
+		type: PRODUCT_SAVE_REQUEST,
+		payload: {name, image}
+	});
+	
+	const {	userSignin: { userInfo } } = getState();
+		
+	Axios.post("http://127.0.0.1:3001/products", {
+			name, image
+		},{
+			headers: {
+				Authorization: 'Bearer ' + userInfo.token,
+				'Content-Type': 'application/json'
 			},
-		} = getState();
-		if (!product._id) {
-			const {
-				data
-			} = await Axios.post('/api/products', product, {
-				headers: {
-					Authorization: 'Bearer ' + userInfo.token,
-				},
-			});
+		}).then(res => {
 			dispatch({
 				type: PRODUCT_SAVE_SUCCESS,
-				payload: data
-			});
-		} else {
-			const {
-				data
-			} = await Axios.put(
-				'/api/products/' + product._id,
-				product, {
-					headers: {
-						Authorization: 'Bearer ' + userInfo.token,
-					},
-				}
-			);
+				payload: res.data,
+				success: true
+			})
+		}).catch(err => {
 			dispatch({
-				type: PRODUCT_SAVE_SUCCESS,
-				payload: data
+				type: PRODUCT_SAVE_FAIL,
+				payload: err.message
 			});
-		}
-	} catch (error) {
-		dispatch({
-			type: PRODUCT_SAVE_FAIL,
-			payload: error.message
 		});
-	}
-};
+}
 
 export { fetchProduct, fetchProductDetails, saveProduct, deleteProdcut};

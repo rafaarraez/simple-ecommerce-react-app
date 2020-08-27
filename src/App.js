@@ -14,6 +14,7 @@ import NewProduct from './views/NewProduct';
 import GlobalStyles from './components/globalStyles/globalStyles';
 import PrivateRoutes from './components/privateRoutes/privateRoutes';
 import AdminRoutes from './components/privateRoutes/adminOnlys/adminnOnlys';
+import NewUser from './views/NewUser';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
 				<PrivateRoutes path="/profile" component={Profile}/>
 				<AdminRoutes path="/products" component={ProductsList}/>
 				<AdminRoutes path="/new-product" component={NewProduct}/>
+				<AdminRoutes path="/new-user" component={NewUser}/>
 				<Footer />
 			</Router>
 		</Provider>	

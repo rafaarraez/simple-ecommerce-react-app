@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import {productos, productDetailsReducer, productSaveReducer, productDeleteReducer } from './products.reducer';
 import { cartReducer } from './cart.reducer';
-import { userRegisterReducer, userSigninReducer } from "./user.reducer";
+import { userRegisterReducer, userSigninReducer, userRegisterByAdminReducer } from "./user.reducer";
 
 const userInfo = JSON.parse(localStorage.getItem('user')) || null;
 const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -19,6 +19,7 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     userSignin: userSigninReducer,
     userRegister: userRegisterReducer,
+    userRegisterByAdmin: userRegisterByAdminReducer
 });
 
 export {rootReducer, initialState};

@@ -10,6 +10,10 @@ export const USER_REGISTER_REQUEST = 'USER_REGISTER_REQUEST';
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS';
 export const USER_REGISTER_FAIL = 'USER_REGISTER_FAIL';
 
+export const USER_REGISTER_BY_ADMIN_REQUEST = 'USER_REGISTER_BY_ADMIN_REQUEST';
+export const USER_REGISTER_BY_ADMIN_SUCCESS = 'USER_REGISTER_BY_ADMIN_SUCCESS';
+export const USER_REGISTER_BY_ADMIN_FAIL = 'USER_REGISTER_BY_ADMIN_FAIL';
+
 
 export const fetchSigninRequets = (email, password) => {
     return {
@@ -79,6 +83,47 @@ const register = (email, password) => async (dispatch) => {
 	}
 }
 
+const registerByAdmin = (email, password) => async (dispatch, getState) => {
+	dispatch({
+		type: USER_REGISTER_BY_ADMIN_REQUEST,
+		payload: {
+			email,
+			password
+		}
+	});
+	try {
+		const {
+			userSignin: {
+				userInfo
+			},
+		} = getState();
+		
+		const {
+			data
+		} = await Axios.post("http://127.0.0.1:3001/users", {
+			email,
+			password
+		},{
+			headers: {
+				Authorization: 'Bearer ' + userInfo.token,
+				'Content-Type': 'application/json'
+			},
+		});
+		dispatch({
+			type: USER_REGISTER_BY_ADMIN_SUCCESS,
+			payload: data,
+			success: true
+		});
+	} catch (error) {
+		dispatch({
+			type: USER_REGISTER_BY_ADMIN_FAIL,
+			payload: error.message
+		});
+		console.log(error);
+		
+	}
+}
+
 const logout = () => (dispatch) => {
 	localStorage.removeItem('user');
 	dispatch({
@@ -89,5 +134,6 @@ const logout = () => (dispatch) => {
 export {
     signin,
 	register,
-	logout
+	logout,
+	registerByAdmin
 };

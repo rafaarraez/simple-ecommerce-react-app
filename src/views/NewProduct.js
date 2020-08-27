@@ -47,37 +47,35 @@ const NewProduct = (props) => {
     } = productSave;
 
     const handlerOnChange = (target) => {
-        const {name, value} = target;        
+        const {name, value} = target; 
+        setName(value);     
     }
 
     const submitHandler = (e) => {
         e.preventDefault();
+        console.log(name, image);
+        
         dispatch(
-          saveProduct({
-            name
-          })
+          saveProduct(
+            name,
+            image
+          )
         );
     };
 
-    const uploadFileHandler = (e) => {
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+    }
+    const handleOnChange = (e) => {
         const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('image', file);
-        setUploading(true);
-        Axios
-            .post('/api/uploads', bodyFormData, {
-                headers: {
-                'Content-Type': 'multipart/form-data',
-                },
-            })
-          .then((response) => {
-                setImage(response.data);
-                setUploading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-                setUploading(false);
-            });
+        getBase64(file).then(
+            data => setImage(data)
+        );
     };
 
     return(
@@ -101,11 +99,10 @@ const NewProduct = (props) => {
                     </li>
                     <li>
                         <label htmlFor="img">Image</label>
-                        <input type="file" accept="image/*"  id="img" name="img" onChange={uploadFileHandler} />
-                        {uploading && <div>Uploading...</div>}
+                        <input type="file" accept="image/*"  id="img" name="img" onChange={handleOnChange} />
                     </li>
                     <li>
-                        <Button type="submit" className="button primary">Create</Button>
+                        <Button type="submit"className="button primary">Create</Button>
                     </li>
                 </FormContainer>
             </form>

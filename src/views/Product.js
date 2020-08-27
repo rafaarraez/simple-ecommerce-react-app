@@ -12,15 +12,16 @@ const Main = styled.main`
     display: flex;
 }
 .left-column {
-    width: 65%;
+    width: 100%;
+    margin:0 auto;
     position: relative;
 }   
 .right-column {
-    width: 35%;
+    width: 100%;
     margin-top: 60px;
 }
 .left-column img {
-    width: 80%;
+    width: 100%;
     left: 0;
     top: 0;
     transition: all 0.3s ease;
@@ -52,28 +53,17 @@ const Main = styled.main`
 }
 @media(max-width: 700px ){
         display: block;
-    }
-    .left-column {
-        width: 100%;
-        margin:auto;
-    }   
-    .right-column {
-        width: 100%;
-    }
-    .left-column img {
-        width: 100%;
-    }
 }
 `;
 
 const Product = (props) => {
     const productDetailsReducer = useSelector((state) => state.productDetailsReducer);
-    const { product, loading, error } = productDetailsReducer;
+    const { product, loading, error, img } = productDetailsReducer;
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchProductDetails(props.match.params.id));
-    }, []);
-    
+    }, []);   
+
     return(
         <Main className="container">
             {loading ? (
@@ -83,7 +73,7 @@ const Product = (props) => {
             ) : (
                 <>
                     <div className="left-column">
-                        <img data-image="red" src={product.avatar} alt="" />
+                        <img src={img} alt="" />
                     </div>
                     <div className="right-column">
                         <div className="product-description">

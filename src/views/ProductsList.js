@@ -57,6 +57,13 @@ const ProductsList = () => {
                         Create Product
                     </Link>
                 </div>
+                {' '}
+                <div className="product-header">
+                    <h3>Products</h3>
+                    <Link to="/new-user" className="button primary">
+                        Create new User
+                    </Link>
+                </div>
                 <div className="product-list">
                     <table className="table">
                         <thead>
